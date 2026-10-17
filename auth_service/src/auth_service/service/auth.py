@@ -5,6 +5,15 @@ from pydantic import BaseModel
 TOKEN_KEY = "book_app_auth_id"
 REQUIRED_ROLE_KEY = "x-required-role"
 
+def _get_required_role(request: Request):
+    current_route = request.scope.get("route")
+
+    if current_route and hasattr(current_route, "openapi_extra"):
+        extra_data = current_route.openapi_extra
+        return extra_data.get(REQUIRED_ROLE_KEY)
+
+    return None
+
 
 class AuthClient(BaseModel):
     mail_address: str
@@ -19,7 +28,7 @@ def verify_auth_param(mail_address: str, password: str):
 
 
 def verify_role(request: Request):
-    # TODO: REQUIRED_ROLE_KEYから必要なロールの値を取得
+    required_role = _get_required_role(request)
 
     # TODO: JWTトークンからロールを取り出してチェック
     return AuthClient(mail_address="", name="", role_id=1)
@@ -35,3 +44,6 @@ def attach_token(response: Response, user: User):
     # トークンの作成
     token = _create_token(user)
     response.set_cookie(TOKEN_KEY, token)
+
+def resolve_token(request: Request):
+    token = request.cookies.get(TOKEN_KEY)

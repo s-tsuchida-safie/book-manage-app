@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from auth_service.app.schema.user import (
+from auth_service.src.auth_service.schema.user import (
     UserPatchIn,
     UserPatchOut,
     UserPostIn,

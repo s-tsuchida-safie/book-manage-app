@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from auth_service.app.schema.admin import AdminPostIn, AdminPostOut
+from auth_service.src.auth_service.schema.admin import AdminPostIn, AdminPostOut
 from auth_service.cruds.user import insert_user
 from auth_service.model.user import Role, User
 from auth_service.service.auth import REQUIRED_ROLE_KEY, AuthClient, verify_role
@@ -14,7 +14,7 @@ router = APIRouter()
     "/admin",
     summary="管理者登録",
     response_model=AdminPostOut,
-    openapi_extra={REQUIRED_ROLE_KEY: Role.ADMIN},
+    openapi_extra={REQUIRED_ROLE_KEY: 'admin.create'},
 )
 async def create_admin(
     params: Annotated[AdminPostIn, Body()],

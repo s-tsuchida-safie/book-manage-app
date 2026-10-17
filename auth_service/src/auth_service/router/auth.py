@@ -1,8 +1,8 @@
 from typing import Annotated
 
-from auth_service.src.auth_service.app.schema.auth import AuthorizePostIn, AuthorizePostOut, TokenExchangePostIn, TokenExchangePostOut
+from auth_service.src.auth_service.schema.auth import AuthorizePostIn, AuthorizePostOut, TokenExchangePostIn, TokenExchangePostOut
 from auth_service.service.auth import attach_token, verify_auth_param
-from fastapi import APIRouter, Body, HTTPException, Response
+from fastapi import APIRouter, Body, HTTPException, Response, Request
 
 router = APIRouter()
 
@@ -17,4 +17,6 @@ async def authorize(params: Annotated[AuthorizePostIn, Body()], response: Respon
     return AuthorizePostOut(status="success")
 
 @router.post("/auth/token/exchange", summary="トークン交換", response_model=TokenExchangePostOut)
-async def exchange_token(params: Annotated[TokenExchangePostIn, Body()])
+async def exchange_token(params: Annotated[TokenExchangePostIn, Body()], request: Request):
+    
+
